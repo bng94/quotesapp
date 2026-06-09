@@ -1,16 +1,13 @@
 {
   "files": {
-    "main.css": "/quotesapp/static/css/main.f18fa454.css",
-    "main.js": "/quotesapp/static/js/main.9a6818f0.js",
-    "static/js/787.482c0832.chunk.js": "/quotesapp/static/js/787.482c0832.chunk.js",
+    "main.css": "/quotesapp/static/css/main.c6234f85.css",
+    "main.js": "/quotesapp/static/js/main.b7c19456.js",
+    "static/js/27.0924f676.chunk.js": "/quotesapp/static/js/27.0924f676.chunk.js",
     "static/media/van-mendoza-r7YZXv5f5cc-unsplash.jpg": "/quotesapp/static/media/van-mendoza-r7YZXv5f5cc-unsplash.0ede6971b55af60ccd0e.jpg",
-    "index.html": "/quotesapp/index.html",
-    "main.f18fa454.css.map": "/quotesapp/static/css/main.f18fa454.css.map",
-    "main.9a6818f0.js.map": "/quotesapp/static/js/main.9a6818f0.js.map",
-    "787.482c0832.chunk.js.map": "/quotesapp/static/js/787.482c0832.chunk.js.map"
+    "index.html": "/quotesapp/index.html"
   },
   "entrypoints": [
-    "static/css/main.f18fa454.css",
-    "static/js/main.9a6818f0.js"
+    "static/css/main.c6234f85.css",
+    "static/js/main.b7c19456.js"
   ]
 }
