@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import "./App.css";
 import Header from "./components/layout/Header";
-import AnimeQuotesPage from "./components/pages/AnimeQuotes";
 import MotivatePage from "./components/pages/Motivate";
 import MyQuotesPage from "./components/pages/MyQuotes";
 import QuotesPage from "./components/pages/Quotes";

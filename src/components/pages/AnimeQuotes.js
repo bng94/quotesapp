@@ -162,6 +162,7 @@ const AnimeQuotesPage = (props) => {
 
   useEffect(() => {
     getAnimeQuotes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
