@@ -19,6 +19,12 @@ export const StyledQuotesSwiperHeader = styled.div`
   @media screen and (max-width: 768px) {
     font-size: 32px;
     width: 90%;
+    margin-bottom: 1rem;
+  }
+
+  @media screen and (max-width: 480px) {
+    font-size: 26px;
+    width: 95%;
   }
 `;
 
@@ -86,6 +92,13 @@ export const StyledGlassQuotesInfoContainer = styled.div`
       props.darkGlass ? props.theme.colors.darkCyanBlue : "white"};
     font-weight: ${(props) => (props.darkGlass ? 700 : 500)};
   }
+
+  @media (max-width: 768px) {
+    padding: 0.75rem;
+    h2 {
+      font-size: 1.25rem;
+    }
+  }
 `;
 
 export const StyledModalGlassQuotesInfoContainer = styled.div`
@@ -108,6 +121,13 @@ export const StyledModalGlassQuotesInfoContainer = styled.div`
   p {
     font-size: 1rem;
   }
+
+  @media (max-width: 768px) {
+    padding: 0.75rem;
+    h2 {
+      font-size: 1.25rem;
+    }
+  }
 `;
 
 export const StyledModalQuoteSource = styled.div`
@@ -116,7 +136,7 @@ export const StyledModalQuoteSource = styled.div`
   left: 0;
   z-index: 100;
   font: small-caption;
-  padding: 1vw 0 0 0;
+  padding: 0.5rem 0 0 0;
 
   a {
     text-decoration: none;

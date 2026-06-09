@@ -114,10 +114,19 @@ const QuotesPage = (props) => {
             >
               Anime Chan API
             </a>
+            and anime poster images from{" "}
+            <a
+              href="https://kitsu.app"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Kitsu API
+            </a>
+            .
           </p>
           <StyledButtonGroup>
             <StyledButton onClick={getQuote} disabled={loading}>
-              {loading ? "Loading..." : "New Quote"}
+              {loading ? "Loading..." : "Generate New Quote"}
             </StyledButton>
             {!rateLimited && quote && !isLoading && animeImg && (
               <StyledButton onClick={() => setHideQuote((prev) => !prev)}>
@@ -134,7 +143,7 @@ const QuotesPage = (props) => {
         )}
 
         {quote && (
-          <div style={{ width: "300px", margin: "0 auto" }}>
+          <div style={{ width: "300px", maxWidth: "calc(100vw - 2rem)", margin: "0 auto" }}>
             <StyledQuotesWithBgImgSwiperSlide
               className="anime-poster"
               bgImg={!isLoading && animeImg ? animeImg : ""}
@@ -142,7 +151,10 @@ const QuotesPage = (props) => {
             >
               {!isLoading && animeImg ? (
                 <>
-                  <StyledGlassQuotesInfoContainer darkGlass noDisplay={hideQuote}>
+                  <StyledGlassQuotesInfoContainer
+                    darkGlass
+                    noDisplay={hideQuote}
+                  >
                     <h2>{quote.character?.name ?? "Unknown"}</h2>
                     {quote.content.length > 300 ? (
                       <p>
@@ -179,14 +191,26 @@ const QuotesPage = (props) => {
                 </StyledGlassQuotesInfoContainer>
               ) : (
                 <div>
-                  <p style={{ fontSize: "1rem", fontWeight: "500", color: "white" }}>
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      fontWeight: "500",
+                      color: "white",
+                    }}
+                  >
                     Loading...
                   </p>
                 </div>
               )}
             </StyledQuotesWithBgImgSwiperSlide>
             {!isLoading && quote.content && (
-              <StyledQuoteSource style={{ position: "static", width: "100%", boxSizing: "border-box" }}>
+              <StyledQuoteSource
+                style={{
+                  position: "static",
+                  width: "100%",
+                  boxSizing: "border-box",
+                }}
+              >
                 Anime:{" "}
                 {quote.anime?.name ? (
                   <a href={pageLink} target="_blank" rel="noopener noreferrer">

@@ -35,6 +35,7 @@ export const StyledSwiperContainer = styled.div`
   }
 
   @media (max-width: 768px) {
+    padding: 0 0.75rem;
     h1 {
       margin-top: 20px;
     }
