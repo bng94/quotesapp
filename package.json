@@ -1,6 +1,6 @@
 {
   "name": "quotesapp",
-  "version": "0.5.3",
+  "version": "1.0.0",
   "private": true,
   "homepage": "https://bng94.github.io/quotesapp/",
   "dependencies": {
