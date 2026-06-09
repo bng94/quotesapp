@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/quotesapp/static/css/main.05dfd990.css",
-    "main.js": "/quotesapp/static/js/main.5cdedcdc.js",
+    "main.js": "/quotesapp/static/js/main.b30ff894.js",
     "static/js/27.0924f676.chunk.js": "/quotesapp/static/js/27.0924f676.chunk.js",
     "static/media/van-mendoza-r7YZXv5f5cc-unsplash.jpg": "/quotesapp/static/media/van-mendoza-r7YZXv5f5cc-unsplash.0ede6971b55af60ccd0e.jpg",
     "index.html": "/quotesapp/index.html"
   },
   "entrypoints": [
     "static/css/main.05dfd990.css",
-    "static/js/main.5cdedcdc.js"
+    "static/js/main.b30ff894.js"
   ]
 }
