@@ -1,9 +1,3 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/effect-coverflow";
-import "swiper/css/pagination";
-import { EffectCoverflow, Pagination } from "swiper";
-import "swiper/css";
 import {
   StyledContainer,
   StyledSwiperContainer,
@@ -12,111 +6,199 @@ import {
   StyledQuotesSwiperHeader,
   StyledQuotesWithBgImgSwiperSlide,
   StyledGlassQuotesInfoContainer,
+  StyledQuoteSource,
+  StyledModalGlassQuotesInfoContainer,
+  StyledModalQuoteSource,
 } from "../styles/Quotes.styled";
-import { ImQuotesLeft, ImQuotesRight } from "react-icons/im";
-import bgImage from "../../image/van-mendoza-r7YZXv5f5cc-unsplash.jpg";
 import { useEffect, useState } from "react";
-import { StyledButton } from "../styles/Button.styled";
+import { StyledButton, StyledButtonGroup } from "../styles/Button.styled";
 import { Helmet } from "react-helmet";
+import axios from "axios";
+import Modal from "../UI/Modal";
 
-const initialAPI = `https://api.quotable.io/quotes?tags=inspirational&maxLength=55&limit=10`;
-
-const famousAPI =
-  "https://api.quotable.io/quotes?tags=famous-quotes&maxLength=40&limit=10";
+const API_URL = `https://api.animechan.io/v1/quotes/random`;
 
 const QuotesPage = (props) => {
-  const [quotesArray, setQuotesArray] = useState([]);
-  const [page, setPage] = useState(1);
-  const [lastItem, setLastItem] = useState(0);
-  const [apiCall, setApiCall] = useState(initialAPI);
+  const [quote, setQuote] = useState(null);
+  const [rateLimited, setRateLimited] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [animeImg, setAnimeImg] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [hideQuote, setHideQuote] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  const getQuotes = async () => {
-    const response = await fetch(`${apiCall}&page=${page}`);
-    const data = await response.json();
-    setLastItem(data.lastItemIndex);
-    setPage(data.page);
-    setQuotesArray((prevState) => [...prevState, ...data.results]);
+  const getAnimeImg = async (anime) => {
+    const animeName = anime === "Pokemon" ? "Pocket Monsters" : anime;
+    const res = await axios.get(`https://kitsu.io/api/edge/anime`, {
+      headers: {
+        "Content-Type": "	application/json",
+      },
+      params: {
+        "filter[text]": `${animeName}`,
+        "filter[subtype]": "TV",
+      },
+    });
+    console.log(res.data.data);
+    console.log(res.data.data[0].attributes);
+    const data = await res.data.data[0].attributes.posterImage.medium;
+    setAnimeImg(data);
+    setIsLoading(false);
   };
-  useEffect(() => {
-    getQuotes();
-  }, [page]);
 
-  const changeAPIcall = () => {
-    if (lastItem === null) {
-      setPage(1);
-      const newAPI = apiCall === initialAPI ? famousAPI : initialAPI;
-      setApiCall(newAPI);
-    } else {
-      setPage((prevState) => prevState + 1);
+  const getQuote = async () => {
+    setLoading(true);
+    setRateLimited(false);
+    setAnimeImg("");
+    setIsLoading(true);
+    setHideQuote(false);
+    setShowModal(false);
+    try {
+      const response = await fetch(API_URL);
+      const data = await response.json();
+      if (data.message) {
+        setRateLimited(true);
+        setQuote(null);
+      } else if (data.status === "success") {
+        setQuote(data.data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch quote", err);
+    } finally {
+      setLoading(false);
     }
-    setQuotesArray((prevState) => []);
   };
+
+  const showModalOverlay = () => {
+    document.body.style.overflow = "hidden";
+    setShowModal(true);
+  };
+
+  const hideModalOverlay = () => {
+    document.body.style.overflow = "scroll";
+    setShowModal(false);
+  };
+
+  useEffect(() => {
+    getQuote();
+  }, []);
+
+  useEffect(() => {
+    if (quote?.anime?.name) {
+      getAnimeImg(quote.anime.name);
+    }
+  }, [quote]);
+
+  const pageLink = quote
+    ? `https://myanimelist.net/anime.php?q=${quote.anime?.name
+        .replaceAll("/", " ")
+        .replaceAll(";", " ")
+        .replaceAll(".", " ")
+        .replaceAll("!", " ")
+        .replaceAll("  ", " ")}`
+    : "";
 
   return (
     <StyledContainer>
       <Helmet>
-        <title>Famous Quotes</title>
+        <title>Anime Quote</title>
       </Helmet>
       <StyledSwiperContainer>
         <StyledQuotesSwiperHeader>
-          <h1>Famous Quotes</h1>
+          <h1>Random Anime Quote</h1>
           <p>
-            Fetching Quotes from{" "}
+            Fetching quotes from{" "}
             <a
-              href={`https://api.quotable.io/`}
+              href="https://animechan.io"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Quotes API{" "}
-            </a>{" "}
-            currently a total of 10 quotes will be generated per call once on
-            and will generate fetch a new Quotes API upon reaching the end of
-            the{" "}
-            <a href={apiCall} target="_blank" rel="noopener noreferrer">
-              API Call
+              Anime Chan API
             </a>
-            . Currently displaying{" "}
-            {apiCall === initialAPI ? "Inspiration Quotes " : "Famous Quotes "}
-            from Quotes API.
           </p>
-          <StyledButton onClick={changeAPIcall}>Refresh Call</StyledButton>
+          <StyledButtonGroup>
+            <StyledButton onClick={getQuote} disabled={loading}>
+              {loading ? "Loading..." : "New Quote"}
+            </StyledButton>
+            {!rateLimited && quote && !isLoading && animeImg && (
+              <StyledButton onClick={() => setHideQuote((prev) => !prev)}>
+                {hideQuote ? "Show Quote" : "Hide Quote"}
+              </StyledButton>
+            )}
+          </StyledButtonGroup>
         </StyledQuotesSwiperHeader>
-        <Swiper
-          spaceBetween={1}
-          slidesPerView={"auto"}
-          onSlideChange={() => console.log("slide change")}
-          onSwiper={(swiper) => console.log(swiper)}
-          grabCursor="true"
-          effect={"coverflow"}
-          centeredSlides={true}
-          coverflowEffect={{
-            rotate: 0,
-            stretch: 0,
-            depth: 100,
-            modifier: 2,
-            slideShadows: true,
-          }}
-          modules={[EffectCoverflow, Pagination]}
-        >
-          {quotesArray.map((item, index) => {
-            return (
-              <SwiperSlide key={index}>
-                <StyledQuotesWithBgImgSwiperSlide default bgImg={bgImage}>
-                  <StyledGlassQuotesInfoContainer centered>
-                    <ImQuotesLeft />
-                    <p>{item.content}</p>
-                    <ImQuotesRight
-                      style={{
-                        marginLeft: "auto",
-                      }}
-                    />
-                    <p>- {item.author ? item.author : "Unknown"}</p>
+
+        {rateLimited && (
+          <p style={{ color: "orange", textAlign: "center", padding: "1rem" }}>
+            Too many requests! Rate limit will reset in 1 hour.
+          </p>
+        )}
+
+        {quote && (
+          <div style={{ width: "300px", margin: "0 auto" }}>
+            <StyledQuotesWithBgImgSwiperSlide
+              className="anime-poster"
+              bgImg={!isLoading && animeImg ? animeImg : ""}
+              style={{ backgroundSize: "cover" }}
+            >
+              {!isLoading && animeImg ? (
+                <>
+                  <StyledGlassQuotesInfoContainer darkGlass noDisplay={hideQuote}>
+                    <h2>{quote.character?.name ?? "Unknown"}</h2>
+                    {quote.content.length > 300 ? (
+                      <p>
+                        {quote.content.slice(0, 300)}...
+                        <span onClick={showModalOverlay}>see more</span>
+                      </p>
+                    ) : (
+                      <p>{quote.content}</p>
+                    )}
                   </StyledGlassQuotesInfoContainer>
-                </StyledQuotesWithBgImgSwiperSlide>
-              </SwiperSlide>
-            );
-          })}
-        </Swiper>
+                  {showModal && (
+                    <Modal onClose={hideModalOverlay}>
+                      <StyledModalGlassQuotesInfoContainer darkGlass>
+                        <h2>{quote.character?.name ?? "Unknown"}</h2>
+                        <p>{quote.content}</p>
+                        <StyledModalQuoteSource>
+                          <span>Anime:</span>{" "}
+                          <a
+                            href={pageLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {quote.anime?.name}
+                          </a>
+                        </StyledModalQuoteSource>
+                      </StyledModalGlassQuotesInfoContainer>
+                    </Modal>
+                  )}
+                </>
+              ) : !isLoading && quote.content ? (
+                <StyledGlassQuotesInfoContainer>
+                  <h2>{quote.character?.name ?? "Unknown"}</h2>
+                  <p>{quote.content}</p>
+                </StyledGlassQuotesInfoContainer>
+              ) : (
+                <div>
+                  <p style={{ fontSize: "1rem", fontWeight: "500", color: "white" }}>
+                    Loading...
+                  </p>
+                </div>
+              )}
+            </StyledQuotesWithBgImgSwiperSlide>
+            {!isLoading && quote.content && (
+              <StyledQuoteSource style={{ position: "static", width: "100%", boxSizing: "border-box" }}>
+                Anime:{" "}
+                {quote.anime?.name ? (
+                  <a href={pageLink} target="_blank" rel="noopener noreferrer">
+                    {quote.anime.name}
+                  </a>
+                ) : (
+                  "N/A"
+                )}
+              </StyledQuoteSource>
+            )}
+          </div>
+        )}
       </StyledSwiperContainer>
     </StyledContainer>
   );
