@@ -143,7 +143,13 @@ const QuotesPage = (props) => {
         )}
 
         {quote && (
-          <div style={{ width: "300px", maxWidth: "calc(100vw - 2rem)", margin: "0 auto" }}>
+          <div
+            style={{
+              width: "300px",
+              maxWidth: "calc(100vw - 2rem)",
+              margin: "0 auto",
+            }}
+          >
             <StyledQuotesWithBgImgSwiperSlide
               className="anime-poster"
               bgImg={!isLoading && animeImg ? animeImg : ""}
